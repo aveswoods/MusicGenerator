@@ -14,6 +14,11 @@ public class Generator {
 					 fPitches = {0,2,4,5,7,9,10,11,5,9,0},
 					 gPitches = {0,2,4,6,7,9,11,7,11,2};
 	
+	//types of harmony structure
+	public static enum Harmonies {
+		DIADS, TRIADS, ARPEGIATION, RHYTHMIC_DIADS, RHYTHMIC_TRIADS;
+	}
+	
 	// only major keys for now
 	public enum Keys {
 		A, //1,2,4,6,8,9,11
@@ -25,37 +30,6 @@ public class Generator {
 		G; //0,2,4,6,7,9,11
 	}
 	
-	private static int getPitch(Keys key) {
-		
-		int pitch = -1;
-		
-		switch(key) {
-		case A:
-			pitch = 9;
-			break;
-		case B:
-			pitch = 11;
-			break;
-		case C:
-			pitch = 0;
-			break;
-		case D:
-			pitch = 2;
-			break;
-		case E:
-			pitch = 4;
-			break;
-		case F:
-			pitch = 5;
-			break;
-		case G:
-			pitch = 7;
-			break;
-		}
-		
-		return pitch;
-		
-	}
 	private static int randPitch(Keys key) {
 		int pitch = -60;
 		switch(key) {
@@ -186,30 +160,43 @@ public class Generator {
 		
 	} // makeRandomSequence
 	
-	public static void addHarmony(Sequence melody, int melodyNum, Keys key, int timeSig) {
+	public static void addHarmony(Sequence melody, Harmonies harm, int melodyNum, Keys key, int root, int timeSig) {
 		
 		Track track = melody.getTracks()[melodyNum];
-		int[] chordTones = getChordPitches(key, getPitch(key));
+		int[] chordTones = getChordPitches(key, root);
 		
 		int totalBeats = timeSig / 10,
 				subDivisions = timeSig % 10,
 				totalTicks = (int) track.ticks(),
 				tickPlacement = 0;
 		
-		for(int i = 0; i < 3; i++) {
-			track.add(makeMidiEvent(144, 2, chordTones[i] + 48, 100, 0));
-			track.add(makeMidiEvent(128, 2, chordTones[i] + 48, 100, totalTicks - 1));
+		switch(harm) {
+		case DIADS:
+			int t = (int)(Math.random() * 2);
+			track.add(makeMidiEvent(144, 2, chordTones[0+t] + 48, 100, 0));
+			track.add(makeMidiEvent(128, 2, chordTones[0+t] + 48, 100, totalTicks - 1));
+			track.add(makeMidiEvent(144, 2, chordTones[1+t] + 48, 100, 0));
+			track.add(makeMidiEvent(128, 2, chordTones[1+t] + 48, 100, totalTicks - 1));
+			break;
+		case TRIADS:
+			for(int i = 0; i < 3; i++) {
+				track.add(makeMidiEvent(144, 2, chordTones[i] + 48, 100, 0));
+				track.add(makeMidiEvent(128, 2, chordTones[i] + 48, 100, totalTicks - 1));
+			}
+			break;
+		
 		}
+		
 	}
 	
 	public static void main(String[] args) {
 		
-		int bpm = 120;
+		int bpm = 100;
 		int timeSig = 44;
 		int totalBeats = timeSig / 10;
 		int subDivisions = timeSig % 10;
-		int numMeasures = 3;
-		Keys key = Keys.G;
+		int numMeasures = 2;
+		Keys key = Keys.B;
 		Sequence sq = null;
 		try {
 			sq = new Sequence(Sequence.PPQ, subDivisions);
@@ -217,7 +204,7 @@ public class Generator {
 			e1.printStackTrace();
 		}
 		addRandomMelody(sq, key, timeSig, numMeasures);
-		addHarmony(sq, 0, key, timeSig);
+		addHarmony(sq, Harmonies.TRIADS, 0, key, 11, timeSig);
 		try {
 			Sequencer sqr = MidiSystem.getSequencer();
 			sqr.open();
