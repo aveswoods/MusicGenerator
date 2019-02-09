@@ -5,13 +5,13 @@ import javax.sound.midi.*;
 public class Generator {
 	
 	//arrays for the pitch base values in each key
-	private String[] aPitches = "1,2,4,6,8,9,11".split(","),
-					 bPitches = "1,3,4,6,8,10,11".split(","),
-					 cPitches = "0,2,4,5,7,9,11".split(","),
-					 dPitches = "1,2,4,6,7,9,11".split(","),
-					 ePitches = "1,3,4,6,8,9,11".split(","),
-					 fPitches = "0,2,4,5,7,9,10,11".split(","),
-					 gPitches = "0,2,4,6,7,9,11".split(",");
+	private static int[] aPitches = {1,2,4,6,8,9,11},
+					 bPitches = {1,3,4,6,8,10,11},
+					 cPitches = {0,2,4,5,7,9,11},
+					 dPitches = {1,2,4,6,7,9,11},
+					 ePitches = {1,3,4,6,8,9,11},
+					 fPitches = {0,2,4,5,7,9,10,11},
+					 gPitches = {0,2,4,6,7,9,11};
 	
 	// only major keys for now
 	public enum Keys {
@@ -28,40 +28,26 @@ public class Generator {
 		int pitch = -1;
 		switch(key) {
 		case A:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 0 || pitch == 3 || pitch == 5 || pitch == 7 || pitch == 10) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = (aPitches[(int) (Math.random() * 7)]);
+			break;
 		case B:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 0 || pitch == 2 || pitch == 5 || pitch == 7 || pitch == 9) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = (bPitches[(int) (Math.random() * 7)]);
+			break;
 		case C:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 10) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = (cPitches[(int) (Math.random() * 7)]);
+			break;
 		case D:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 0 || pitch == 3 || pitch == 5 || pitch == 8 || pitch == 10) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = dPitches[(int) (Math.random() * 7)];
+			break;
 		case E:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 0 || pitch == 2 || pitch == 5 || pitch == 7 || pitch == 10) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = ePitches[(int) (Math.random() * 7)];
+			break;
 		case F:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 1 || pitch == 3 || pitch == 6 || pitch == 8 || pitch == 11) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = fPitches[(int) (Math.random() * 7)];
+			break;
 		case G:
-			pitch = (int) (Math.random() * 12);
-			while(pitch == -1 || pitch == 1 || pitch == 3 || pitch == 5 || pitch == 8 || pitch == 10) {
-				pitch = (int) (Math.random() * 12);
-			}
+			pitch = gPitches[(int) (Math.random() * 7)];
+			break;
 		} // switch
 		
 		// middle C or higher
