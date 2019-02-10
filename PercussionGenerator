@@ -1,0 +1,63 @@
+package musgen;
+
+
+import javax.sound.midi.*;
+import musgen.Generator;
+
+public class PercussionGenerator {
+	
+	private static enum Percussions{
+		TINKLE_BELL, AGOGO, STEEL_DRUMS, WOODBLOCK, TAIKO_DRUM,
+		MELODIC_TOM, SYNTH_DRUM, REVERSE_CYMBAL;
+	}
+	
+	public static int getPitch (Percussions drums) {
+		switch(drums) {
+			case TINKLE_BELL:
+				return 27;
+			case AGOGO:
+				return 28;
+			case STEEL_DRUMS:
+				return 29;
+			case WOODBLOCK:
+				return 30;
+			case TAIKO_DRUM:
+				return 31;
+			case MELODIC_TOM:
+				return 32;
+			case SYNTH_DRUM:
+				return 33;
+			case REVERSE_CYMBAL:
+				return 34;
+			default:
+				return 35;
+		}
+	}
+	
+	public static void addRandomPercussion(Sequence sq, Percussions drums, int pitch, int timeSig, int numMeasures) {
+		//makes a sequence dependent on a time signature
+		// and a number of measures
+		int totalBeats = timeSig/10,
+			subDivisions = timeSig%10,
+			totalTicks = totalBeats * subDivisions* numMeasures,
+			tickPlacement =0;
+		
+		Track track = null;
+		if(sq.getTracks().length == 0) {
+			track = sq.createTrack();
+		}
+		else 
+			track = sq.getTracks()[0];
+		int randPitch = getPitch(Percussions.STEEL_DRUMS);
+		while(tickPlacement < totalTicks) {
+			int randLength = ((int) (subDivisions / 2))*((int) (Math.random() * totalBeats)+1);
+			if(totalTicks-tickPlacement < randLength) {
+				randLength = totalTicks - tickPlacement;
+			}
+			track.add(Generator.makeMidiEvent(144, 1, randPitch, 100, tickPlacement));
+			track.add(Generator.makeMidiEvent(128, 1, randPitch, 100, tickPlacement+randLength));
+			tickPlacement+=randLength;
+		}//while
+	}//addRandomPercussion
+
+}
