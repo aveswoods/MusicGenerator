@@ -5,33 +5,81 @@ import musgen.Theory.Keys;
 import musgen.Theory.Harmonies;
 import java.util.Random;
 public class Generator {
-	public static int randPitch(Keys key, int scaleDegree) {
+	private static int randPitch(Keys key, int scaleDegree, int prevNote) {
 		int pitch = -60;
 		switch(key) {
 		case A:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.aPitches[(prevNote - 1 + 7) % 7] : Theory.aPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case B:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.bPitches[(prevNote - 1 + 7) % 7] : Theory.bPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case C:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.cPitches[(prevNote - 1 + 7) % 7] : Theory.cPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case D:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.dPitches[(prevNote - 1 + 7) % 7] : Theory.dPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case E:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.ePitches[(prevNote - 1 + 7) % 7] : Theory.ePitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case F:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.fPitches[(prevNote - 1 + 7) % 7] : Theory.fPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case G:
-			pitch = ((Math.random() * 2 < 1 ? (Theory.gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.gPitches[(prevNote - 1 + 7) % 7] : Theory.gPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (Theory.gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
-		} 
+		} // switch
+		
+		// middle C or higher
 		return pitch + 60;
-	} 
+	} // randPitch
+	
+	private static int getPosInArray(int[] arr, int num) {
+		
+		for(int i = 0; i < arr.length; i++) {
+			if(arr[i] == num)
+				return i;
+		}
+	}
+		
+	private static int[] getKeyPitches(Keys key) {
+		
+		int[] scale = null;
+		
+		switch(key) {
+		case A:
+			scale = Theory.aPitches;
+			break;
+		case B:
+			scale = Theory.bPitches;
+			break;
+		case C:
+			scale = Theory.cPitches;
+			break;
+		case D:
+			scale = Theory.dPitches;
+			break;
+		case E:
+			scale = Theory.ePitches;
+			break;
+		case F:
+			scale = Theory.fPitches;
+			break;
+		case G:
+			scale = Theory.gPitches;
+			break;
+		}
+		
+		return scale;
+	}
 	
 	public static int[] getChordPitches(Keys key, int scaleDegree) {
 		
@@ -109,17 +157,24 @@ public class Generator {
 			totalTicks = totalBeats * subDivisions * numMeasures,
 			tickPlacement = 0;
 
-		Track track = sq.createTrack();
+		Track track = null;
+		if(sq.getTracks().length == 0)
+			track = sq.createTrack();
+		else
+			track = sq.getTracks()[0];
 		
+		int randPitch = 0;
+		int prevNote = 0;
+		int[] scale = getKeyPitches(key);
 		while(tickPlacement < totalTicks) {
-			int randPitch = 
-			randPitch(key, root);
+			randPitch = randPitch(key, root, prevNote);
+			prevNote = getPosInArray(scale, randPitch);
 			int randLength = ((int) (subDivisions / 2)) * ((int) (Math.random() * totalBeats) + 1);
 			if(totalTicks - tickPlacement < randLength) {
 				randLength = totalTicks - tickPlacement;
 			}
-			track.add(makeMidiEvent(144, 1, randPitch, 100, tickPlacement));
-			track.add(makeMidiEvent(128, 1, randPitch, 100, tickPlacement + randLength));
+			track.add(makeMidiEvent(144, 0, randPitch, 100, tickPlacement));
+			track.add(makeMidiEvent(128, 0, randPitch, 100, tickPlacement + randLength));
 			tickPlacement += randLength;
 		}
 		
