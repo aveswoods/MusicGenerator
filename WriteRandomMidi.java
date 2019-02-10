@@ -12,10 +12,9 @@ import musgen.Generator.*;
 import musgen.Theory.Harmonies;
 import musgen.Theory.Keys;
 
-
 public class WriteRandomMidi {
 
-	public static Keys getRandomKey() {
+	protected static Keys getRandomKey() {
 		
 		int n = (int) (Math.random() * 7);
 		Keys key = null;
@@ -48,7 +47,7 @@ public class WriteRandomMidi {
 		
 	} // getRandomKey
 	
-	public static int[] getRandomChords() {
+	protected static int[] getRandomChords() {
 		int[] chords = new int[4];
 		chords[0] = 1;
 		
@@ -105,7 +104,7 @@ public class WriteRandomMidi {
 		return chords;
 	}
 
-	public static Harmonies getRandomHarmony() {
+	private static Harmonies getRandomHarmony() {
 		
 		int n = (int) (Math.random() * 5);
 		Harmonies harm = null;
@@ -131,7 +130,7 @@ public class WriteRandomMidi {
 		return harm;
 	}
 	
-	public static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
+	protected static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
 		
 		Sequence seq = new Sequence(Sequence.PPQ, 4);
 		seq.createTrack();
@@ -159,7 +158,7 @@ public class WriteRandomMidi {
 		return seq;
 	}
 	
-	public static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
+	protected static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
 		
 		Sequence[] song = new Sequence[4];
 		Harmonies harm = getRandomHarmony();
@@ -167,42 +166,19 @@ public class WriteRandomMidi {
 			Sequence sq = new Sequence(Sequence.PPQ, 4);
 			Generator.addRandomMelody(sq, key, chords[i] - 1, 44, measuresPerChord);
 			Generator.addHarmony(sq, harm, 1, key, chords[i] - 1, 44);
-			Generator.addHarmony(sq, Harmonies.PEDAL_WHOLE, 2, key, chords[i] - 1, 44);
 			song[i] = sq;
 		}
 		
 		return song;
 	}
 	
-	public static void writeMidi(int bpm) {
-		
-		Sequence[] song = null;
-		
-		// makes the sequences into an array
-		try {
-			song = makeRandomSong(getRandomKey(), getRandomChords(), 2);
-		} catch (InvalidMidiDataException e1) {
-			e1.printStackTrace();
-		}
-		
-		Sequence s = null;
-		try {
-			s = combineSequences(song);
-		} catch (InvalidMidiDataException e1) {
-			e1.printStackTrace();
-		}
+	public static void writeMidi(Sequence s, int bpm, String path) {
 		
 		//writes the file!
 		try {
-			MidiSystem.write(s, 0, new File("TestMidis/Test.midi"));
+			MidiSystem.write(s, 0, new File(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-
-		writeMidi(120);
-		
 	}
 } 
