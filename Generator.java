@@ -156,7 +156,6 @@ public class Generator {
 	 * 
 	 * @param melody the sequence which is being harmonized
 	 * @param harm the Harmony type from enum Harmonies
-	 * @param melodyNum the track number of the melody in the sequence "melody"
 	 * @param key the key of the melody (from enum Keys)
 	 * @param root the scale degree from the key which is the root of this harmony (0-6)
 	 * @param timeSig the time signature of the melody (put 44, thats the only one that works)
