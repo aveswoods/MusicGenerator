@@ -64,7 +64,7 @@ public class WriteRandomMidi {
 		
 		if(Math.random() * 8 < 1) {
 			chords[2] = 1;
-			chords[3] = 1;
+			chords[3] = 4;
 			return chords;
 		}
 		
@@ -102,7 +102,33 @@ public class WriteRandomMidi {
 		return chords;
 	}
 
-	private static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
+	private static Harmonies getRandomHarmony() {
+		
+		int n = (int) (Math.random() * 5);
+		Harmonies harm = null;
+		
+		switch(n) {
+		case 0:
+			harm = Harmonies.DIADS;
+			break;
+		case 1:
+			harm = Harmonies.TRIADS;
+			break;
+		case 2:
+			harm = Harmonies.ARPEGGIATION;
+			break;
+		case 3:
+			harm = Harmonies.RHYTHMIC_DIADS;
+			break;
+		case 4:
+			harm = Harmonies.RHYTHMIC_TRIADS;
+			break;
+		}
+		
+		return harm;
+	}
+	
+	protected static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
 		
 		Sequence seq = new Sequence(Sequence.PPQ, 4);
 		seq.createTrack();
@@ -130,22 +156,23 @@ public class WriteRandomMidi {
 		return seq;
 	}
 	
-	public static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
+	protected static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
 		
 		Sequence[] song = new Sequence[4];
+		Harmonies harm = getRandomHarmony();
 		for(int i = 0; i < 4; i++) {
 			Sequence sq = new Sequence(Sequence.PPQ, 4);
 			Generator.addRandomMelody(sq, key, chords[i] - 1, 44, measuresPerChord);
-			Generator.addHarmony(sq, Harmonies.ARPEGGIATION, 1, key, chords[i] - 1, 44);
+			Generator.addHarmony(sq, harm, 1, key, chords[i] - 1, 44);
+			Generator.addHarmony(sq, Harmonies.PEDAL_WHOLE, 2, key, chords[i] - 1, 44);
 			song[i] = sq;
 		}
 		
 		return song;
 	}
 	
-	public static void main(String[] args) {
+	public static void writeMidi(int bpm) {
 		
-		int bpm = 120;
 		Sequence[] song = null;
 		
 		// makes the sequences into an array
@@ -164,9 +191,15 @@ public class WriteRandomMidi {
 		
 		//writes the file!
 		try {
-			MidiSystem.write(s, 0, new File("TestMidis/Test1.midi"));
+			MidiSystem.write(s, 0, new File("TestMidis/Test.midi"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+
+		writeMidi(120);
+		
 	}
 } 
