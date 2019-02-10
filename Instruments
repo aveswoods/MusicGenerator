@@ -1,7 +1,12 @@
 package musgen;
 
 import java.util.Random;
-
+/**
+ * Represents the {@code Instruments} that are used
+ * for each genre which are randomly chosen.
+ * @author parkerciaramella, zanbeaver, andrewdecker
+ *
+ */
 public class Instruments {
 	Random random = new Random();
 	private static int[] instrumentNumbers = {0,5,7,10,11,16,19,20,21,22,28,35,38,39,40,41,44,50,51,52,55,
@@ -12,7 +17,11 @@ public class Instruments {
 	private static int[] Ensemble = {48,49,50,51,52,53,54,55};
 	private static int[] Piano = {0};
 	private static int[] Percussion = {113,114,115,116,117,118,119,120};
-	
+	/**
+	 * Returns a random set of instruments based on the genre of music.
+	 * @param n the genre of music
+	 * @return an int representing a random integer.
+	 */
 	public int randomInstrument(int n) {
 		if (n == 1) {
 			int randomNumber = random.nextInt(instrumentNumbers.length);
