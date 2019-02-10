@@ -6,6 +6,11 @@ import musgen.Generator;
 import musgen.Theory.Keys;
 import java.util.Random;
 
+/*
+**************************
+*  CLASS IS OBSOLETE    *
+**************************
+*/
 public class PercussionGenerator {
 	
 	private static enum Percussions{
