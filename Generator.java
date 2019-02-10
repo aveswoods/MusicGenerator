@@ -4,6 +4,7 @@ import javax.sound.midi.*;
 import musgen.Theory.Keys;
 import musgen.Theory.Harmonies;
 import java.util.Random;
+
 public class Generator {
 	private static int randPitch(Keys key, int scaleDegree, int prevNote) {
 		int pitch = -60;
@@ -48,6 +49,8 @@ public class Generator {
 			if(arr[i] == num)
 				return i;
 		}
+		
+		return -1;
 	}
 		
 	private static int[] getKeyPitches(Keys key) {
@@ -126,7 +129,7 @@ public class Generator {
 		return notes;
 	} 
 	
-	private static MidiEvent makeMidiEvent(int command, int channel, int pitch, int velocity, int tick) {
+	protected static MidiEvent makeMidiEvent(int command, int channel, int pitch, int velocity, int tick) {
 		
 		MidiEvent event = null;
 		try {
@@ -181,7 +184,7 @@ public class Generator {
 	} // addRandomMelody
 	
 	/**
-	 * Adds a harmony to track 2 of the specified sequence
+	 * Adds a harmony to a channel of the specified sequence
 	 * 
 	 * @param melody the sequence which is being harmonized
 	 * @param harm the Harmony type from enum Harmonies
@@ -271,22 +274,17 @@ public class Generator {
 		}
 	} // addHarmony
 	
-	public static void play(int instrument1, int instrument2) {
-		Random random = new Random();
-		int beats = random.nextInt(61) + 60;
+	public static Sequence play(int instrument1, int instrument2, int bpm) {
 		int timeSig = 44; 
-		int totalBeats = timeSig / 10;
 		int subDivisions = timeSig % 10;
-		int numMeasures = 8;
-		Keys key = Keys.C;
+		int numMeasures = 8; //this is the number of measures that each chord plays over (i.e. the length)
 		Sequence sq = null;
 		try {
 			sq = new Sequence(Sequence.PPQ, subDivisions);
 		} catch (InvalidMidiDataException e1) {
 			e1.printStackTrace();
 		}
-		addRandomMelody(sq, key, 0, timeSig, numMeasures);
-		addHarmony(sq, Harmonies.ARPEGGIATION, 0, key, 0, timeSig);
+
 		try {
 			
 			MidiChannel[] midChannel;
@@ -294,8 +292,8 @@ public class Generator {
 			syn.open();
 			
 			midChannel = syn.getChannels();
-			midChannel[1].programChange(instrument1);
-			midChannel[2].programChange(instrument2);
+			midChannel[0].programChange(instrument1);
+			midChannel[1].programChange(instrument2);
 			midChannel = syn.getChannels();
 					
 			Sequencer sqr = MidiSystem.getSequencer();
@@ -304,9 +302,9 @@ public class Generator {
 			sqrTrans.setReceiver(synthRcvr);
 			
 			sqr.open();
-			sq = WriteRandomMidi.combineSequences(WriteRandomMidi.makeRandomSong(WriteRandomMidi.getRandomKey(), WriteRandomMidi.getRandomChords(), 2));
+			sq = WriteRandomMidi.combineSequences(WriteRandomMidi.makeRandomSong(WriteRandomMidi.getRandomKey(), WriteRandomMidi.getRandomChords(), numMeasures));
 			sqr.setSequence(sq);
-			sqr.setTempoInBPM(beats);
+			sqr.setTempoInBPM(bpm);
 			sqr.start();
 		
 		} catch (MidiUnavailableException e) {
@@ -314,6 +312,8 @@ public class Generator {
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
 		}
+		
+		return sq;
 	}
 	
 }
