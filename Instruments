@@ -10,6 +10,7 @@ public class Instruments {
 	private static int[] Reed = {64,65,66,67,68,69,70,71};
 	private static int[] Guitar = {24,25,26,27,28,29,30,31,32,33,34,35,36,37};
 	private static int[] Ensemble = {48,49,50,51,52,53,54,55};
+	private static int[] Piano = {0};
 	
 	public int randomInstrument(int n) {
 		if (n == 1) {
@@ -21,14 +22,16 @@ public class Instruments {
 		} else if (n == 3) {
 			int randomNumber = random.nextInt(Reed.length);
 			return Reed[randomNumber];
-		} else if (n == 5) {
+		} else if (n == 4) {
 			int randomNumber = random.nextInt(Guitar.length);
 			return Guitar[randomNumber];
-		} else {
+		} else if (n == 5) {
 			int randomNumber = random.nextInt(Ensemble.length);
 			return Ensemble[randomNumber];
+		} else {
+			int randomNumber = random.nextInt(Piano.length);
+			return Piano[randomNumber];
 		}
 		
 	}
 }
-
