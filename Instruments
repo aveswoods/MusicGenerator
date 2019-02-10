@@ -8,7 +8,7 @@ public class Instruments {
 			64,65,65,66,67,77,88,94,96,102,104,108,114};
 	private static int[] Brass = {56,57,58,59,60,61,62,63};
 	private static int[] Reed = {64,65,66,67,68,69,70,71};
-	private static int[] Guitar = {24,25,26,27,28,29,30,31,32,33,34,35,36,37,106};
+	private static int[] Guitar = {24,25,26,27,28,29,30,31,32,33,34,35,36,37};
 	private static int[] Ensemble = {48,49,50,51,52,53,54,55};
 	private static int[] Piano = {0};
 	private static int[] Percussion = {113,114,115,116,117,118,119,120};
