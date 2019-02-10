@@ -3,6 +3,8 @@ package musgen;
 
 import javax.sound.midi.*;
 import musgen.Generator;
+import musgen.Theory.Keys;
+import java.util.Random;
 
 public class PercussionGenerator {
 	
@@ -14,23 +16,23 @@ public class PercussionGenerator {
 	public static int getPitch (Percussions drums) {
 		switch(drums) {
 			case TINKLE_BELL:
-				return 27;
+				return 113;
 			case AGOGO:
-				return 28;
+				return 114;
 			case STEEL_DRUMS:
-				return 29;
+				return 115;
 			case WOODBLOCK:
-				return 30;
+				return 116;
 			case TAIKO_DRUM:
-				return 31;
+				return 117;
 			case MELODIC_TOM:
-				return 32;
+				return 118;
 			case SYNTH_DRUM:
-				return 33;
+				return 119;
 			case REVERSE_CYMBAL:
-				return 34;
+				return 120;
 			default:
-				return 35;
+				return 119;
 		}
 	}
 	
@@ -48,7 +50,7 @@ public class PercussionGenerator {
 		}
 		else 
 			track = sq.getTracks()[0];
-		int randPitch = getPitch(Percussions.STEEL_DRUMS);
+		int randPitch = getPitch(drums);
 		while(tickPlacement < totalTicks) {
 			int randLength = ((int) (subDivisions / 2))*((int) (Math.random() * totalBeats)+1);
 			if(totalTicks-tickPlacement < randLength) {
@@ -59,5 +61,47 @@ public class PercussionGenerator {
 			tickPlacement+=randLength;
 		}//while
 	}//addRandomPercussion
-
+	
+	public static void play(int instrument) {
+		Random random = new Random();
+		int beats = random.nextInt(61) + 60;
+		int timeSig = 44;
+		int totalBeats = timeSig / 10;
+		int subDivisions = timeSig % 10;
+		int numMeasures = 8;
+		Percussions drums = Percussions.STEEL_DRUMS;
+		Sequence sq = null;
+		try {
+			sq = new Sequence(Sequence.PPQ, subDivisions);
+		} catch (InvalidMidiDataException e1) {
+			e1.printStackTrace();
+		}
+		addRandomPercussion(sq, drums, getPitch(drums), timeSig,numMeasures);
+		try {
+			
+			MidiChannel[] midChannel;
+			Synthesizer syn = MidiSystem.getSynthesizer();
+			syn.open();
+			
+			midChannel = syn.getChannels();
+			midChannel[1].programChange(instrument);
+			midChannel = syn.getChannels();
+					
+			Sequencer sqr = MidiSystem.getSequencer();
+			Transmitter sqrTrans = sqr.getTransmitter();
+			Receiver synthRcvr = syn.getReceiver();
+			sqrTrans.setReceiver(synthRcvr);
+			
+			sqr.open();
+			sq = WriteRandomMidi.combineSequences(WriteRandomMidi.makeRandomSong(WriteRandomMidi.getRandomKey(), WriteRandomMidi.getRandomChords(), 2));
+			sqr.setSequence(sq);
+			sqr.setTempoInBPM(beats);
+			sqr.start();
+		
+		} catch (MidiUnavailableException e) {
+			e.printStackTrace();
+		} catch (InvalidMidiDataException e) {
+			e.printStackTrace();
+		}
+	}
 }
