@@ -9,10 +9,13 @@ import javax.sound.midi.spi.MidiFileWriter;
 
 import musgen.Generator;
 import musgen.Generator.*;
+import musgen.Theory.Harmonies;
+import musgen.Theory.Keys;
+
 
 public class WriteRandomMidi {
 
-	private static Keys getRandomKey() {
+	public static Keys getRandomKey() {
 		
 		int n = (int) (Math.random() * 7);
 		Keys key = null;
@@ -45,7 +48,7 @@ public class WriteRandomMidi {
 		
 	} // getRandomKey
 	
-	private static int[] getRandomChords() {
+	public static int[] getRandomChords() {
 		int[] chords = new int[4];
 		chords[0] = 1;
 		
@@ -102,7 +105,7 @@ public class WriteRandomMidi {
 		return chords;
 	}
 
-	private static Harmonies getRandomHarmony() {
+	public static Harmonies getRandomHarmony() {
 		
 		int n = (int) (Math.random() * 5);
 		Harmonies harm = null;
@@ -128,7 +131,7 @@ public class WriteRandomMidi {
 		return harm;
 	}
 	
-	protected static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
+	public static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
 		
 		Sequence seq = new Sequence(Sequence.PPQ, 4);
 		seq.createTrack();
@@ -156,7 +159,7 @@ public class WriteRandomMidi {
 		return seq;
 	}
 	
-	protected static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
+	public static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
 		
 		Sequence[] song = new Sequence[4];
 		Harmonies harm = getRandomHarmony();
@@ -171,7 +174,7 @@ public class WriteRandomMidi {
 		return song;
 	}
 	
-	public static void writeMidi(int bpm, String path) {
+	public static void writeMidi(int bpm) {
 		
 		Sequence[] song = null;
 		
@@ -191,7 +194,7 @@ public class WriteRandomMidi {
 		
 		//writes the file!
 		try {
-			MidiSystem.write(s, 0, new File(path));
+			MidiSystem.write(s, 0, new File("TestMidis/Test.midi"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -199,7 +202,7 @@ public class WriteRandomMidi {
 	
 	public static void main(String[] args) {
 
-		writeMidi(120, "TestMidis/Test.midi");
+		writeMidi(120);
 		
 	}
 } 
