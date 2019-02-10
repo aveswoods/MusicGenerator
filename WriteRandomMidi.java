@@ -171,7 +171,7 @@ public class WriteRandomMidi {
 		return song;
 	}
 	
-	public static void writeMidi(int bpm) {
+	public static void writeMidi(int bpm, String path) {
 		
 		Sequence[] song = null;
 		
@@ -191,7 +191,7 @@ public class WriteRandomMidi {
 		
 		//writes the file!
 		try {
-			MidiSystem.write(s, 0, new File("TestMidis/Test.midi"));
+			MidiSystem.write(s, 0, new File(path));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -199,7 +199,7 @@ public class WriteRandomMidi {
 	
 	public static void main(String[] args) {
 
-		writeMidi(120);
+		writeMidi(120, "TestMidis/Test.midi");
 		
 	}
 } 
