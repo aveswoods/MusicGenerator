@@ -11,10 +11,11 @@ public class Driver {
 							+ "3. Reed\n"
 							+ "4. Guitar\n"
 							+ "5. Ensemble\n"
-							+ "6. Piano\n");
+							+ "6. Piano\n"
+							+ "7. Percussion\n");
 		int genre = scan.nextInt();
 		Generator.play(ins.randomInstrument(genre), ins.randomInstrument(genre));
-
+		
 	}
 
 }
