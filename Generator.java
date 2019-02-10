@@ -31,29 +31,36 @@ public class Generator {
 		G; //0,2,4,6,7,9,11
 	}
 	
-	private static int randPitch(Keys key, int scaleDegree) {
+	private static int randPitch(Keys key, int scaleDegree, int prevNote) {
 		int pitch = -60;
 		switch(key) {
 		case A:
-			pitch = ((Math.random() * 2 < 1 ? (aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? aPitches[(prevNote - 1 + 7) % 7] : aPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case B:
-			pitch = ((Math.random() * 2 < 1 ? (bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? bPitches[(prevNote - 1 + 7) % 7] : bPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case C:
-			pitch = ((Math.random() * 2 < 1 ? (cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? cPitches[(prevNote - 1 + 7) % 7] : cPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case D:
-			pitch = ((Math.random() * 2 < 1 ? (dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? dPitches[(prevNote - 1 + 7) % 7] : dPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case E:
-			pitch = ((Math.random() * 2 < 1 ? (ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? ePitches[(prevNote - 1 + 7) % 7] : ePitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case F:
-			pitch = ((Math.random() * 2 < 1 ? (fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? fPitches[(prevNote - 1 + 7) % 7] : fPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		case G:
-			pitch = ((Math.random() * 2 < 1 ? (gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
+			pitch = ((int)(Math.random() * 2) == 1) ? ((Math.random() * 2 < 1) ? gPitches[(prevNote - 1 + 7) % 7] : gPitches[(prevNote + 1 + 7) % 7])
+					: (Math.random() * 3 > 1 ? (gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
 			break;
 		} // switch
 		
@@ -61,7 +68,7 @@ public class Generator {
 		return pitch + 60;
 	} // randPitch
 	
-	/*private static int getPosInArray(int[] arr, int num) {
+	private static int getPosInArray(int[] arr, int num) {
 		
 		for(int i = 0; i < arr.length; i++) {
 			if(arr[i] == num)
@@ -69,7 +76,38 @@ public class Generator {
 		}
 		
 		return -1;
-	} */// getPostInArray
+	} // getPostInArray
+	
+	private static int[] getKeyPitches(Keys key) {
+		
+		int[] scale = null;
+		
+		switch(key) {
+		case A:
+			scale = aPitches;
+			break;
+		case B:
+			scale = bPitches;
+			break;
+		case C:
+			scale = cPitches;
+			break;
+		case D:
+			scale = dPitches;
+			break;
+		case E:
+			scale = ePitches;
+			break;
+		case F:
+			scale = fPitches;
+			break;
+		case G:
+			scale = gPitches;
+			break;
+		}
+		
+		return scale;
+	}
 	
 	private static int[] getChordPitches(Keys key, int scaleDegree) {
 		
@@ -145,7 +183,6 @@ public class Generator {
 		int totalBeats = timeSig / 10,
 			subDivisions = timeSig % 10,
 			totalTicks = totalBeats * subDivisions * numMeasures,
-			currentTicks = (int) sq.getTickLength(),
 			tickPlacement = 0;
 
 		Track track = null;
@@ -154,8 +191,12 @@ public class Generator {
 		else
 			track = sq.getTracks()[0];
 		
+		int randPitch = 0;
+		int prevNote = -1;
+		int[] scale = getKeyPitches(key);
 		while(tickPlacement < totalTicks) {
-			int randPitch = randPitch(key, root);
+			randPitch = randPitch(key, root, prevNote);
+			prevNote = getPosInArray(scale, randPitch);
 			int randLength = ((int) (subDivisions / 2)) * ((int) (Math.random() * totalBeats) + 1);
 			if(totalTicks - tickPlacement < randLength) {
 				randLength = totalTicks - tickPlacement;
@@ -172,6 +213,7 @@ public class Generator {
 	 * 
 	 * @param melody the sequence which is being harmonized
 	 * @param harm the Harmony type from enum Harmonies
+	 * @param channel the channel that the harmony is placed in (1-15)
 	 * @param key the key of the melody (from enum Keys)
 	 * @param root the scale degree from the key which is the root of this harmony (0-6)
 	 * @param timeSig the time signature of the melody (put 44, thats the only one that works)
@@ -208,15 +250,16 @@ public class Generator {
 			break;
 			
 		case ARPEGGIATION:
+			t = (int)(Math.random() * 2);
 			for(int i = 0; i < totalTicks / numBeats; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 70, subDivisions * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0] + 36, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 36, 70, subDivisions * i + 1));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 36, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[2] + 36, 70, subDivisions * i + 2));
-				track.add(makeMidiEvent(128, channel, chordTones[2] + 36, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 36, 70, subDivisions * i + 3));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 36, 70, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, channel, chordTones[0] + 48, 70, subDivisions * i));
+				track.add(makeMidiEvent(128, channel, chordTones[0] + 48, 70, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 70, subDivisions * i + 1));
+				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 70, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, channel, chordTones[2] + 48, 70, subDivisions * i + 2));
+				track.add(makeMidiEvent(128, channel, chordTones[2] + 48, 70, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 70, subDivisions * i + 3));
+				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 70, subDivisions * (i + 1)));
 			}
 			break;
 		case RHYTHMIC_DIADS:
@@ -244,13 +287,13 @@ public class Generator {
 			
 		case PEDAL:
 			track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, totalTicks));
-			track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, totalTicks + totalTicks - 1));
+			track.add(makeMidiEvent(128, channel, chordTones[0] + 36, 75, totalTicks + totalTicks - 1));
 			break;
 			
 		case PEDAL_WHOLE:
 			for(int i = 0; i < numMeasures; i++) {
 				track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, subDivisions * numBeats * i));
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, subDivisions * numBeats * (i + 1) - 1));
+				track.add(makeMidiEvent(128, channel, chordTones[0] + 36, 75, subDivisions * numBeats * (i + 1) - 1));
 			}
 			break;
 		}
