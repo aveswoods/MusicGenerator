@@ -12,9 +12,19 @@ import musgen.Generator.*;
 import musgen.Theory.Harmonies;
 import musgen.Theory.Keys;
 
+/**
+ * Class that utilizes many helper methods in order to
+ * write a random MIDI message.
+ * @author parkerciaramella, zanbeaver, andrewdecker
+ *
+ */
 public class WriteRandomMidi {
 
-	protected static Keys getRandomKey() {
+	/**
+	 * Randomly chooses a key to play the music in.
+	 * @return Keys
+	 */
+	public static Keys getRandomKey() {
 		
 		int n = (int) (Math.random() * 7);
 		Keys key = null;
@@ -47,7 +57,11 @@ public class WriteRandomMidi {
 		
 	} // getRandomKey
 	
-	protected static int[] getRandomChords() {
+	/**
+	 * Randomly establishes chords for the music.
+	 * @return
+	 */
+	public static int[] getRandomChords() {
 		int[] chords = new int[4];
 		chords[0] = 1;
 		
@@ -104,7 +118,11 @@ public class WriteRandomMidi {
 		return chords;
 	}
 
-	private static Harmonies getRandomHarmony() {
+	/**
+	 * Randomly establishes given harmonies.
+	 * @return
+	 */
+	public static Harmonies getRandomHarmony() {
 		
 		int n = (int) (Math.random() * 5);
 		Harmonies harm = null;
@@ -130,7 +148,14 @@ public class WriteRandomMidi {
 		return harm;
 	}
 	
-	protected static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
+	/**
+	 * Takes a given number of sequences are combines the ticks of each midi-
+	 * event of each track of each sequence... confusing right?
+	 * @param seqs
+	 * @return Sequence
+	 * @throws InvalidMidiDataException
+	 */
+	public static Sequence combineSequences(Sequence[] seqs) throws InvalidMidiDataException {
 		
 		Sequence seq = new Sequence(Sequence.PPQ, 4);
 		seq.createTrack();
@@ -158,7 +183,15 @@ public class WriteRandomMidi {
 		return seq;
 	}
 	
-	protected static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
+	/**
+	 * Makes a random song.
+	 * @param key
+	 * @param chords
+	 * @param measuresPerChord
+	 * @return Sequence[]
+	 * @throws InvalidMidiDataException
+	 */
+	public static Sequence[] makeRandomSong(Keys key, int[] chords, int measuresPerChord) throws InvalidMidiDataException {
 		
 		Sequence[] song = new Sequence[4];
 		Harmonies harm = getRandomHarmony();
@@ -172,6 +205,10 @@ public class WriteRandomMidi {
 		return song;
 	}
 	
+	/**
+	 * Writes a MIDI file for the randomly generated music.
+	 * @param bpm
+	 */
 	public static void writeMidi(Sequence s, int bpm, String path) {
 		
 		//writes the file!
@@ -181,4 +218,5 @@ public class WriteRandomMidi {
 			e.printStackTrace();
 		}
 	}
+
 } 
