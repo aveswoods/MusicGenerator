@@ -1,0 +1,19 @@
+package musgen;
+import java.util.Scanner;
+public class Driver {
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		Instruments ins = new Instruments();
+		System.out.println("Pick a Genre\n"
+							+ "1. All Instruments\n"
+							+ "2. Brass\n"
+							+ "3. Reed\n"
+							+ "4. Guitar\n"
+							+ "5. Ensemble\n");
+		int genre = scan.nextInt();
+		Generator.play(ins.randomInstrument(genre), ins.randomInstrument(genre));
+
+	}
+
+}
