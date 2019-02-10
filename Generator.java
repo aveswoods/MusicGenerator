@@ -4,86 +4,53 @@ import javax.sound.midi.*;
 import musgen.Theory.Keys;
 import musgen.Theory.Harmonies;
 import java.util.Random;
-
+/**
+ * 
+ * @author parkerciaramella, zanbeaver, andrewdecker
+ * This class randomly generates chords and notes according to
+ * the {@code Instrument} randomly chose by the {@code Driver} class.
+ */
 public class Generator {
-	private static int randPitch(Keys key, int scaleDegree, int prevNote) {
+	/**
+	 * Sets up a random pitch for a given note.
+	 * @param key
+	 * @param scaleDegree
+	 * @return int
+	 */
+	public static int randPitch(Keys key, int scaleDegree) {
 		int pitch = -60;
 		switch(key) {
 		case A:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.aPitches[(prevNote - 1 + 7) % 7] : Theory.aPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.aPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case B:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.bPitches[(prevNote - 1 + 7) % 7] : Theory.bPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.bPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case C:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.cPitches[(prevNote - 1 + 7) % 7] : Theory.cPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.cPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case D:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.dPitches[(prevNote - 1 + 7) % 7] : Theory.dPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.dPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case E:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.ePitches[(prevNote - 1 + 7) % 7] : Theory.ePitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.ePitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case F:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.fPitches[(prevNote - 1 + 7) % 7] : Theory.fPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.fPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
 		case G:
-			pitch = ((int)(Math.random() * 4) > 1) ? ((Math.random() * 2 < 1) ? Theory.gPitches[(prevNote - 1 + 7) % 7] : Theory.gPitches[(prevNote + 1 + 7) % 7])
-					: (Math.random() * 3 > 1 ? (Theory.gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]);
+			pitch = ((Math.random() * 2 < 1 ? (Theory.gPitches[(int) (Math.random() * 7)]) : getChordPitches(key, scaleDegree)[(int) (Math.random()*3)]));
 			break;
-		} // switch
-		
-		// middle C or higher
+		} 
 		return pitch + 60;
-	} // randPitch
+	} 
 	
-	private static int getPosInArray(int[] arr, int num) {
-		
-		for(int i = 0; i < arr.length; i++) {
-			if(arr[i] == num)
-				return i;
-		}
-		
-		return -1;
-	}
-		
-	private static int[] getKeyPitches(Keys key) {
-		
-		int[] scale = null;
-		
-		switch(key) {
-		case A:
-			scale = Theory.aPitches;
-			break;
-		case B:
-			scale = Theory.bPitches;
-			break;
-		case C:
-			scale = Theory.cPitches;
-			break;
-		case D:
-			scale = Theory.dPitches;
-			break;
-		case E:
-			scale = Theory.ePitches;
-			break;
-		case F:
-			scale = Theory.fPitches;
-			break;
-		case G:
-			scale = Theory.gPitches;
-			break;
-		}
-		
-		return scale;
-	}
-	
+	/**
+	 * Creates pitches for whole chords according to an array of notes.
+	 * @param key
+	 * @param scaleDegree
+	 * @return int[]
+	 */
 	public static int[] getChordPitches(Keys key, int scaleDegree) {
 		
 		int[] notes = new int[3];
@@ -128,8 +95,16 @@ public class Generator {
 		
 		return notes;
 	} 
-	
-	protected static MidiEvent makeMidiEvent(int command, int channel, int pitch, int velocity, int tick) {
+	/**
+	 * Creates an {@code MiniEvent} that will keep track of the notes played or stopped.
+	 * @param command
+	 * @param channel
+	 * @param pitch
+	 * @param velocity
+	 * @param tick
+	 * @return
+	 */
+	public static MidiEvent makeMidiEvent(int command, int channel, int pitch, int velocity, int tick) {
 		
 		MidiEvent event = null;
 		try {
@@ -160,31 +135,24 @@ public class Generator {
 			totalTicks = totalBeats * subDivisions * numMeasures,
 			tickPlacement = 0;
 
-		Track track = null;
-		if(sq.getTracks().length == 0)
-			track = sq.createTrack();
-		else
-			track = sq.getTracks()[0];
+		Track track = sq.createTrack();
 		
-		int randPitch = 0;
-		int prevNote = 0;
-		int[] scale = getKeyPitches(key);
 		while(tickPlacement < totalTicks) {
-			randPitch = randPitch(key, root, prevNote);
-			prevNote = getPosInArray(scale, randPitch);
+			int randPitch = 
+			randPitch(key, root);
 			int randLength = ((int) (subDivisions / 2)) * ((int) (Math.random() * totalBeats) + 1);
 			if(totalTicks - tickPlacement < randLength) {
 				randLength = totalTicks - tickPlacement;
 			}
-			track.add(makeMidiEvent(144, 0, randPitch, 100, tickPlacement));
-			track.add(makeMidiEvent(128, 0, randPitch, 100, tickPlacement + randLength));
+			track.add(makeMidiEvent(144, 1, randPitch, 100, tickPlacement));
+			track.add(makeMidiEvent(128, 1, randPitch, 100, tickPlacement + randLength));
 			tickPlacement += randLength;
 		}
 		
 	} // addRandomMelody
 	
 	/**
-	 * Adds a harmony to a channel of the specified sequence
+	 * Adds a harmony to track 2 of the specified sequence
 	 * 
 	 * @param melody the sequence which is being harmonized
 	 * @param harm the Harmony type from enum Harmonies
@@ -207,73 +175,76 @@ public class Generator {
 		switch(harm) {
 		case DIADS:
 			t = (int)(Math.random() * 2);
-			for(int i = 0; i < numMeasures; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0+t] + 48, 90, subDivisions * numBeats * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0+t] + 48, 90, subDivisions * numBeats * (i + 1) - 1));
-				track.add(makeMidiEvent(144, channel, chordTones[1+t] + 48, 90, subDivisions * numBeats * i));
-				track.add(makeMidiEvent(128, channel, chordTones[1+t] + 48, 90, subDivisions * numBeats * (i + 1) - 1));
-			}
+			track.add(makeMidiEvent(144, 2, chordTones[0+t] + 48, 100, 0));
+			track.add(makeMidiEvent(128, 2, chordTones[0+t] + 48, 100, totalTicks - 1));
+			track.add(makeMidiEvent(144, 2, chordTones[1+t] + 48, 100, 0));
+			track.add(makeMidiEvent(128, 2, chordTones[1+t] + 48, 100, totalTicks - 1));
 			break;
 			
 		case TRIADS:
-			for(int i = 0; i < numMeasures; i++) {
-				for(int j = 0; j < 3; j++) {
-					track.add(makeMidiEvent(144, channel, chordTones[j] + 48, 85, subDivisions * numBeats * i));
-					track.add(makeMidiEvent(128, channel, chordTones[j] + 48, 85, subDivisions * numBeats * (i + 1) - 1));
-				}
+			for(int i = 0; i < 3; i++) {
+				track.add(makeMidiEvent(144, 2, chordTones[i] + 48, 100, 0));
+				track.add(makeMidiEvent(128, 2, chordTones[i] + 48, 100, totalTicks - 1));
 			}
 			break;
 			
 		case ARPEGGIATION:
-			t = (int)(Math.random() * 2);
 			for(int i = 0; i < totalTicks / numBeats; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 48, 70, subDivisions * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0] + 48, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 70, subDivisions * i + 1));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[2] + 48, 70, subDivisions * i + 2));
-				track.add(makeMidiEvent(128, channel, chordTones[2] + 48, 70, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 70, subDivisions * i + 3));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 70, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 65, subDivisions * i));
+				track.add(makeMidiEvent(128, 2, chordTones[0] + 36, 65, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[1] + 36, 65, subDivisions * i + 1));
+				track.add(makeMidiEvent(128, 2, chordTones[1] + 36, 65, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[channel] + 36, 65, subDivisions * i + 2));
+				track.add(makeMidiEvent(128, 2, chordTones[channel] + 36, 65, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[1] + 36, 65, subDivisions * i + 3));
+				track.add(makeMidiEvent(128, 2, chordTones[1] + 36, 65, subDivisions * (i + 1)));
 			}
 			break;
 		case RHYTHMIC_DIADS:
 			t = (int)(Math.random() * 2);
+			track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 80, 0));
+			track.add(makeMidiEvent(128, 2, chordTones[0] + 36, 80, totalTicks - 1));
 			for(int i = 0; i < totalTicks / numBeats; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 48, 75, subDivisions * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0] + 48, 75, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1 + t] + 48, 75, subDivisions * i + 2));
-				track.add(makeMidiEvent(128, channel, chordTones[1 + t] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[0] + 48, 75, subDivisions * i));
+				track.add(makeMidiEvent(128, 2, chordTones[0] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[1 + t] + 48, 75, subDivisions * i + 2));
+				track.add(makeMidiEvent(128, 2, chordTones[1 + t] + 48, 75, subDivisions * (i + 1)));
 			}
 			break;
 			
 		case RHYTHMIC_TRIADS:
 			for(int i = 0; i < totalTicks / numBeats; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 48, 75, subDivisions * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0] + 48, 75, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 75, subDivisions * i));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 75, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[1] + 48, 75, subDivisions * i + 2));
-				track.add(makeMidiEvent(128, channel, chordTones[1] + 48, 75, subDivisions * (i + 1)));
-				track.add(makeMidiEvent(144, channel, chordTones[2] + 48, 75, subDivisions * i + 2));
-				track.add(makeMidiEvent(128, channel, chordTones[2] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[0] + 48, 75, subDivisions * i));
+				track.add(makeMidiEvent(128, 2, chordTones[0] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[1] + 48, 75, subDivisions * i));
+				track.add(makeMidiEvent(128, 2, chordTones[1] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[1] + 48, 75, subDivisions * i + 2));
+				track.add(makeMidiEvent(128, 2, chordTones[1] + 48, 75, subDivisions * (i + 1)));
+				track.add(makeMidiEvent(144, 2, chordTones[channel] + 48, 75, subDivisions * i + 2));
+				track.add(makeMidiEvent(128, 2, chordTones[channel] + 48, 75, subDivisions * (i + 1)));
 			}
 			break;
 			
 		case PEDAL:
-			track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, totalTicks));
-			track.add(makeMidiEvent(128, channel, chordTones[0] + 36, 75, totalTicks + totalTicks - 1));
+			track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 75, 0));
+			track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 75, totalTicks - 1));
 			break;
 			
 		case PEDAL_WHOLE:
 			for(int i = 0; i < numMeasures; i++) {
-				track.add(makeMidiEvent(144, channel, chordTones[0] + 36, 75, subDivisions * numBeats * i));
-				track.add(makeMidiEvent(128, channel, chordTones[0] + 36, 75, subDivisions * numBeats * (i + 1) - 1));
+				track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 75, subDivisions * numBeats * i));
+				track.add(makeMidiEvent(144, 2, chordTones[0] + 36, 75, subDivisions * numBeats * (i + 1) - 1));
 			}
 			break;
 		}
 	} // addHarmony
 	
+	/**
+	 * Main player of the music, creates a {@code Sequence} object
+	 * and a {@code Synthesizer} to make some pretty dank music.
+	 * @param instrument1
+	 * @param instrument2
+	 */
 	public static Sequence play(int instrument1, int instrument2, int bpm) {
 		int timeSig = 44; 
 		int subDivisions = timeSig % 10;
