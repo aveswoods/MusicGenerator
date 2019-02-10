@@ -1,8 +1,18 @@
 package musgen;
 import java.util.Random;
 import java.util.Scanner;
+/**
+ * Driver class that creates and plays .MIDI files.
+ * @author parkerciaramella, zanbeaver, andrewdecker
+ *
+ */
 public class Driver {
-
+	/**
+	 * Main method that lets you choose your genre of music to
+	 * play. Also saves the .MIDI file to the directory where 
+	 * you run the .java project.
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		Scanner scan = new Scanner(System.in);
 		Instruments ins = new Instruments();
